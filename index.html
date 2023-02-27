@@ -291,7 +291,14 @@
             player2Flips.textContent = game.player2Flips;
 
             let currentPlayer = document.getElementById('currentPlayer');
+            let currentPlayerColor = document.querySelector('.current-player');
             currentPlayer.textContent = `Player ${game.playerTurn}`
+            if (game.currentPlayer === 1) {
+                currentPlayerColor.style.backgroundColor = '#FF6633';
+            } else {
+                currentPlayerColor.style.backgroundColor = '#FF6633';
+            }
+            
         }
 
         const hideContent = () => {
@@ -336,7 +343,13 @@
             player2Flips.textContent = game.player2Flips;
 
             let currentPlayer = document.getElementById('currentPlayer');
+            let currentPlayerColor = document.querySelector('.current-player')
             currentPlayer.textContent = `Player ${game.playerTurn}`
+            if (game.currentPlayer === 1) {
+                currentPlayerColor.style.backgroundColor = '#FF6633';
+            } else {
+                currentPlayerColor.style.backgroundColor = '#FF6633';
+            }
         };
 
         let startGame = document.getElementById('startbutton');
