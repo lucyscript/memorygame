@@ -22,7 +22,7 @@
             <div id="stat">
                 <span id="currentPlayer">Player 1</span>
             </div>
-            <div id="player2">
+            <div id="player2" class="current-player">
                 <p>
                     <span>Player 2:</span>&nbsp;<span class="score">0</span>
                 </p>
@@ -291,14 +291,16 @@
             player2Flips.textContent = game.player2Flips;
 
             let currentPlayer = document.getElementById('currentPlayer');
-            let currentPlayerColor = document.querySelector('.current-player');
             currentPlayer.textContent = `Player ${game.playerTurn}`
-            if (game.currentPlayer === 1) {
-                currentPlayerColor.style.backgroundColor = '#FF6633';
+            let player1Color = document.querySelector('#player1.current-player');
+            let player2Color = document.querySelector('#player2.current-player');
+            if (game.playerTurn === 1) {
+                player2Color.style.backgroundColor = 'rgb(16, 109, 178)';
+                player1Color.style.backgroundColor = '#FF6633';
             } else {
-                currentPlayerColor.style.backgroundColor = '#FF6633';
+                player1Color.style.backgroundColor = 'rgb(16, 109, 178)';
+                player2Color.style.backgroundColor = '#FF6633';
             }
-            
         }
 
         const hideContent = () => {
@@ -343,12 +345,17 @@
             player2Flips.textContent = game.player2Flips;
 
             let currentPlayer = document.getElementById('currentPlayer');
-            let currentPlayerColor = document.querySelector('.current-player')
             currentPlayer.textContent = `Player ${game.playerTurn}`
-            if (game.currentPlayer === 1) {
-                currentPlayerColor.style.backgroundColor = '#FF6633';
+            let player1Color = document.querySelector('#player1.current-player');
+            let player2Color = document.querySelector('#player2.current-player');
+            if (game.playerTurn === 1) {
+                player2Color.style.backgroundColor = 'rgb(16, 109, 178)';
+                player1Color.style.backgroundColor = '#FF6633';
+                return;
             } else {
-                currentPlayerColor.style.backgroundColor = '#FF6633';
+                player1Color.style.backgroundColor = 'rgb(16, 109, 178)';
+                player2Color.style.backgroundColor = '#FF6633';
+                return;
             }
         };
 
