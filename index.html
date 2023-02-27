@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Memory</title> 
+</head>
+<body>
+    <div id="app">
+        <div id="startbutton">Start game</div>
+        <div id="gamestat">
+            <div id="player1" class="current-player">
+                <p>
+                    <span>Player 1:</span>&nbsp;<span class="score"> 0</span>
+                </p>
+                <p>
+                    <span class="flips">0</span>&nbsp;flips
+                </p>
+            </div>
+            <div id="stat">
+                <span id="currentPlayer">Player 1</span>
+            </div>
+            <div id="player2">
+                <p>
+                    <span>Player 2:</span>&nbsp;<span class="score">0</span>
+                </p>
+                <p>
+                    <span class="flips">0</span>&nbsp;flips
+                </p>
+            </div>
+        </div>
+        <div id="cardboard" class="cardboard" style="width: 400px;">
+            <div class="outer">
+                <!-- class flipped flipps the card -->
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <!-- class removed hides the card -->
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+            <div class="outer">
+                <div class="card front">
+                    <img src="images/A.png">
+                </div>
+                <div class="card back"></div>
+            </div>
+        </div>
+        <div id="winner" class="winner">
+            The winner is <span id="winnerSpan"></span>!
+        </div>
+    </div>
+
+    <script>
+        
+        class Card {
+            constructor(letter) {
+                this.letter = letter;
+            }
+        }
+
+        const game = {
+            playerTurn: 1,
+            turns: 0,
+            player1Score: 0,
+            player2Score: 0,
+            player1Flips: 0,
+            player2Flips: 0,
+            locked: false,
+            cards: []
+        };
+
+        const shuffle = (cards) => {
+            for (let i = cards.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cards[i], cards[j]] = [cards[j], cards[i]];
+            }
+            return cards;
+        };
+
+        const renderCards = () => {
+            let cardboard = document.getElementById('cardboard');
+            cardboard.innerHTML = '';
+
+            let cards = ["A", "B", "C", "D", "E","F","G","H", "A", "B", "C", "D", "E","F","G","H"];
+
+            shuffle(cards);
+
+            cards.forEach((letter) => {
+
+                let card = new Card(letter);
+                game.cards.push(card);
+                
+                let outerDiv = document.createElement('div');
+                let frontDiv = document.createElement('div');
+                let backDiv = document.createElement('div');
+                let img = document.createElement('img');
+
+                outerDiv.append(frontDiv);
+                outerDiv.append(backDiv);
+
+                outerDiv.classList.add('outer');
+                frontDiv.classList.add('card', 'front');
+                backDiv.classList.add('card', 'back');
+                
+                img.src = `images/${card.letter}.png`;
+                frontDiv.appendChild(img);
+
+                outerDiv.dataset.letter = letter;
+                cardboard.appendChild(outerDiv);
+            });
+        }
+
+        const compareCards = () => {
+            let previousCard = null;
+            let cards = document.querySelectorAll('.outer');
+            let remainingCards = game.cards.length;
+
+            cards.forEach((card) => {
+                card.addEventListener('click', () => {
+                    if (previousCard === null) {
+                        card.classList.add('flipped');
+                        previousCard = card;
+                        return;
+                    } else {
+                        if (card === previousCard) {
+                            return;
+                        }
+                    }
+                    card.classList.add('flipped');
+                    game.turns++;
+                    if (card.dataset.letter === previousCard.dataset.letter) {
+                        setTimeout(() => {
+                            card.classList.add('removed')
+                            previousCard.classList.add('removed');
+                            remainingCards -= 2;
+                            if (game.playerTurn === 1) {
+                                game.player1Score ++;
+                                game.player1Flips += 2;
+                            } else {
+                                game.player2Score ++;
+                                game.player2Flips += 2;
+                            }
+                            previousCard = null;
+                            renderGameStat();
+                            return;
+                        }, 1000);
+                    } else {
+                        setTimeout(() => {
+                            card.classList.remove('flipped');
+                            previousCard.classList.remove('flipped');
+
+                            if (game.playerTurn === 1) {
+                                game.playerTurn = 2;
+                                game.player1Flips += 2;
+                            } else {
+                                game.playerTurn = 1;
+                                game.player2Flips += 2;
+                            }
+                            previousCard = null;
+                            renderGameStat();
+                            return;
+                        }, 1000);
+                    }
+                    if (remainingCards === 2) {
+                        setTimeout(() => {
+                            let winnerSpan = document.getElementById('winnerSpan');
+                            let cardboard = document.getElementById('cardboard');
+                            let currentPlayer = document.getElementById('currentPlayer');
+                            cardboard.style.display = 'none';
+                            currentPlayer.style.display = 'none';
+                            winner.style.display = 'block';
+
+                            if (game.player1Score > game.player2Score) {
+                                winnerSpan.innerText = 'player 1';
+                            } else if (game.player1Score < game.player2Score) {
+                                winnerSpan.innerText = 'player 2';
+                            } else if (game.player1Score === game.player2Score) {
+                                if (game.player1Flips > game.player2Flips) {
+                                    winnerSpan.innerText = 'player 2';
+                                } else {
+                                    winnerSpan.innerText = 'player 1';
+                                }
+                            } else if (game.player1Score === game.player2Score && game.player1Flips === game.player2Flips) {
+                                document.getElementById('winner');
+                                winner.innerText = 'The game ended in a draw!';
+                            }
+                            return;
+                        }, 1000); 
+                    }
+                });
+            });
+        }
+
+        const renderGameStat = () => {
+            let player1Score = document.querySelector('#player1 .score');
+            player1Score.textContent = game.player1Score;
+
+            let player2Score = document.querySelector('#player2 .score');
+            player2Score.textContent = game.player2Score;
+
+            let player1Flips = document.querySelector('#player1 .flips');
+            player1Flips.textContent = game.player1Flips;
+
+            let player2Flips = document.querySelector('#player2 .flips');
+            player2Flips.textContent = game.player2Flips;
+
+            let currentPlayer = document.getElementById('currentPlayer');
+            currentPlayer.textContent = `Player ${game.playerTurn}`
+        }
+
+        const hideContent = () => {
+            let winner = document.getElementById('winner');
+            let cardboard = document.getElementById('cardboard');
+            let gamestart = document.getElementById('gamestart');
+
+            winner.style.display = 'none';
+            cardboard.style.display = 'none';
+            gamestat.style.display = 'none';
+        }
+
+        const showContent = () => {
+            let winner = document.getElementById('winner');
+            let cardboard = document.getElementById('cardboard');
+            let gamestart = document.getElementById('gamestart');
+
+            cardboard.style.display = 'flex';
+            gamestat.style.display = 'flex';
+        }
+
+        const resetUI = () => {
+            game.playerTurn = 1;
+            game.turns = 0;
+            game.player1Score = 0;
+            game.player2Score = 0;
+            game.player1Flips = 0;
+            game.player2Flips = 0;
+            game.locked = false;
+            game.cards = [];
+
+            let player1Score = document.querySelector('#player1 .score');
+            player1Score.textContent = game.player1Score;
+
+            let player2Score = document.querySelector('#player2 .score');
+            player2Score.textContent = game.player2Score;
+
+            let player1Flips = document.querySelector('#player1 .flips');
+            player1Flips.textContent = game.player1Flips;
+
+            let player2Flips = document.querySelector('#player2 .flips');
+            player2Flips.textContent = game.player2Flips;
+
+            let currentPlayer = document.getElementById('currentPlayer');
+            currentPlayer.textContent = `Player ${game.playerTurn}`
+        };
+
+        let startGame = document.getElementById('startbutton');
+        hideContent();
+        startGame.addEventListener('click', () => {
+            let newGame = document.getElementById('startbutton');
+            let currentPlayer = document.getElementById('currentPlayer');
+            newGame.textContent = 'New game';
+            currentPlayer.style.display = 'block';
+            hideContent();
+            resetUI();
+            renderCards();
+            compareCards();
+            showContent();
+        });
+
+    </script>
+</body>
+</html>
